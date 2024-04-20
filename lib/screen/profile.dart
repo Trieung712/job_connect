@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,6 +16,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
   late bool _status;
   final FocusNode myFocusNode = FocusNode();
   File? _image;
+  String? _userId;
   final picker = ImagePicker();
 
   TextEditingController _nameController = TextEditingController();
@@ -26,7 +28,17 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
+    _fetchUserId();
     _status = true;
+  }
+
+  Future<void> _fetchUserId() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      setState(() {
+        _userId = user.uid;
+      });
+    }
   }
 
   Future getImage() async {
@@ -452,14 +464,16 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
 
     // Thực hiện lưu vào Firestore ở đây
     // Ví dụ:
-    FirebaseFirestore.instance.collection('users').add({
-      'name': name,
-      'email': email,
-      'phone': phone,
-      'job': job,
-      'experience': experience,
-      'image_url': _image != null ? _image!.path : null,
-    });
+    if (_userId != null) {
+      FirebaseFirestore.instance.collection('users').doc(_userId).set({
+        'name': name,
+        'email': email,
+        'phone': phone,
+        'job': job,
+        'experience': experience,
+        'image_url': _image != null ? _image!.path : null,
+      }, SetOptions(merge: true));
+    }
 
     // Sau khi lưu, cập nhật trạng thái về readOnly
     setState(() {
