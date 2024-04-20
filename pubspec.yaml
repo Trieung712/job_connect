@@ -54,6 +54,8 @@ dependencies:
   google_sign_in: ^6.2.1
   the_apple_sign_in: ^1.1.1
   curved_navigation_bar: ^1.0.3
+  flutter_resume_template: ^1.2.0
+  animated_theme_switcher: ^2.0.10
 
 
 dev_dependencies:

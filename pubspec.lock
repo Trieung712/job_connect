@@ -9,6 +9,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.3.30"
+  animated_theme_switcher:
+    dependency: "direct main"
+    description:
+      name: animated_theme_switcher
+      sha256: "24ccd74437b8db78f6d1ec701804702817bced5f925b1b3419c7a93071e3d3e9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.10"
   animations:
     dependency: "direct main"
     description:
@@ -41,6 +49,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.11.0"
+  auto_size_text:
+    dependency: transitive
+    description:
+      name: auto_size_text
+      sha256: "3f5261cd3fb5f2a9ab4e2fc3fba84fd9fcaac8821f20a1d4e71f557521b22599"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.0"
+  barcode:
+    dependency: transitive
+    description:
+      name: barcode
+      sha256: "1fe4a55344505850517ce72d4a3a7b9ccf51b0dc1631ee7e552f6eacc4947f96"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.2.7"
+  bidi:
+    dependency: transitive
+    description:
+      name: bidi
+      sha256: "1a7d0c696324b2089f72e7671fd1f1f64fef44c980f3cebc84e803967c597b63"
+      url: "https://pub.dev"
+    source: hosted
+    version: "2.0.10"
   boolean_selector:
     dependency: transitive
     description:
@@ -185,6 +217,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.7"
+  dio:
+    dependency: transitive
+    description:
+      name: dio
+      sha256: "11e40df547d418cc0c4900a9318b26304e665da6fa4755399a9ff9efd09034b5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.4.3+1"
   fake_async:
     dependency: transitive
     description:
@@ -374,6 +414,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.19"
+  flutter_resume_template:
+    dependency: "direct main"
+    description:
+      name: flutter_resume_template
+      sha256: eae7149ba78b14393e683a9a17a1e4e62c4143e4f4d026f270041798443ef358
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.2.0"
   flutter_screenutil:
     dependency: "direct main"
     description:
@@ -382,6 +430,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.9.0"
+  flutter_shake_animated:
+    dependency: transitive
+    description:
+      name: flutter_shake_animated
+      sha256: "93ce87fa31467c28f10f11147243172a7692df846589b30ff16e592de20341b2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.5"
   flutter_staggered_grid_view:
     dependency: "direct main"
     description:
@@ -416,6 +472,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "8.2.5"
+  google_fonts:
+    dependency: transitive
+    description:
+      name: google_fonts
+      sha256: "2776c66b3e97c6cdd58d1bd3281548b074b64f1fd5c8f82391f7456e38849567"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.0.5"
   google_identity_services_web:
     dependency: transitive
     description:
@@ -472,6 +536,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.1"
+  http_mock_adapter:
+    dependency: transitive
+    description:
+      name: http_mock_adapter
+      sha256: "00f48d69f31d79e389f7a8544b266a214020a8b79d9f376f54e84ae13d3e2965"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.4.4"
   http_parser:
     dependency: transitive
     description:
@@ -704,6 +776,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.2.1"
+  pdf:
+    dependency: transitive
+    description:
+      name: pdf
+      sha256: "243f05342fc0bdf140eba5b069398985cdbdd3dbb1d776cf43d5ea29cc570ba6"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.10.8"
   petitparser:
     dependency: transitive
     description:
@@ -744,6 +824,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.8.0"
+  qr:
+    dependency: transitive
+    description:
+      name: qr
+      sha256: "64957a3930367bf97cc211a5af99551d630f2f4625e38af10edd6b19131b64b3"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.0.1"
   rxdart:
     dependency: transitive
     description:
