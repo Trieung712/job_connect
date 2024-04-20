@@ -1,9 +1,11 @@
 import 'dart:io';
-
+import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:my_app/log/login.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -29,6 +31,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
   void initState() {
     super.initState();
     _fetchUserId();
+    _fetchUserData();
     _status = true;
   }
 
@@ -38,6 +41,58 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
       setState(() {
         _userId = user.uid;
       });
+    }
+  }
+
+  Future<void> _fetchUserData() async {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      // Tải dữ liệu từ Firestore
+      DocumentSnapshot userData = await FirebaseFirestore.instance
+          .collection('users')
+          .doc(user.uid)
+          .get();
+      if (userData.exists) {
+        // Lấy đường dẫn hình ảnh từ DocumentSnapshot
+        String? imageUrl = userData['image_url'];
+
+        // Kiểm tra xem đường dẫn hình ảnh có tồn tại không
+        if (imageUrl != null && imageUrl.isNotEmpty) {
+          // Nếu có, tải hình ảnh từ Firestore
+          // Ví dụ: sử dụng phương thức _getImageFromUrl(imageUrl)
+          _getImageFromUrl(imageUrl);
+        }
+
+        // Cập nhật các trường dữ liệu khác từ DocumentSnapshot
+        setState(() {
+          _nameController.text = userData['name'] ?? '';
+          _emailController.text = userData['email'] ?? '';
+          _phoneController.text = userData['phone'] ?? '';
+          _jobController.text = userData['job'] ?? '';
+          _experienceController.text = userData['experience'] ?? '';
+        });
+      }
+    }
+  }
+
+  Future<void> _getImageFromUrl(String imageUrl) async {
+    try {
+      // Sử dụng thư viện http để tải hình ảnh từ URL
+      var response = await http.get(Uri.parse(imageUrl));
+
+      // Kiểm tra xem tải hình ảnh thành công hay không
+      if (response.statusCode == 200) {
+        // Lưu hình ảnh vào biến _image
+        setState(() {
+          _image = File(imageUrl);
+        });
+      } else {
+        // Xử lý khi không tải được hình ảnh
+        print('Failed to load image: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Xử lý khi có lỗi xảy ra
+      print('Error loading image: $e');
     }
   }
 
@@ -106,7 +161,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                               backgroundColor: Colors.transparent,
                               backgroundImage: _image != null
                                   ? FileImage(_image!)
-                                  : AssetImage('images/profile_user.png')
+                                  : AssetImage('images/profile-user.png')
                                       as ImageProvider,
                             ),
                           ),
@@ -358,11 +413,21 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                           ],
                         ),
                       ),
+                      Padding(
+                        padding: const EdgeInsets.all(16.0),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            _showLogoutConfirmationDialog(context);
+                          },
+                          child: Text('Logout'),
+                        ),
+                      ),
                       !_status ? _getActionButtons() : Container(),
                     ],
                   ),
                 ),
-              )
+              ),
+              // Nút logout
             ],
           ),
         ],
@@ -454,7 +519,34 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
     );
   }
 
-  void _saveProfileData() {
+  Future<void> _showLogoutConfirmationDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Are you sure?'),
+          content: Text('Do you want to logout?'),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('Back'),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                    context, MaterialPageRoute(builder: (context) => LogIn()));
+              },
+              child: Text('Ok'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _saveProfileData() async {
     // Lưu thông tin vào Firestore
     String name = _nameController.text;
     String email = _emailController.text;
@@ -462,8 +554,13 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
     String job = _jobController.text;
     String experience = _experienceController.text;
 
-    // Thực hiện lưu vào Firestore ở đây
-    // Ví dụ:
+    // Thực hiện tải hình ảnh lên Firebase Storage (ví dụ)
+    String? imageUrl;
+    if (_image != null) {
+      imageUrl = await _uploadImageToFirebaseStorage(_image!);
+    }
+
+    // Thực hiện lưu vào Firestore
     if (_userId != null) {
       FirebaseFirestore.instance.collection('users').doc(_userId).set({
         'name': name,
@@ -471,7 +568,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
         'phone': phone,
         'job': job,
         'experience': experience,
-        'image_url': _image != null ? _image!.path : null,
+        'image_url': imageUrl,
       }, SetOptions(merge: true));
     }
 
@@ -479,5 +576,26 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
     setState(() {
       _status = true;
     });
+  }
+
+  Future<String?> _uploadImageToFirebaseStorage(File imageFile) async {
+    try {
+      // Tạo reference đến vị trí lưu trữ trên Firebase Storage
+      var storageRef = FirebaseStorage.instance
+          .ref()
+          .child('profile_images')
+          .child(_userId!);
+
+      // Tải hình ảnh lên Firebase Storage
+      var uploadTask = storageRef.putFile(imageFile);
+
+      // Lấy đường dẫn của hình ảnh sau khi tải lên thành công
+      var imageUrl = await (await uploadTask).ref.getDownloadURL();
+
+      return imageUrl;
+    } catch (e) {
+      print('Error uploading image to Firebase Storage: $e');
+      return null;
+    }
   }
 }
