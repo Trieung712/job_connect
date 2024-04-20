@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:my_app/log/login.dart';
+import 'package:path_provider/path_provider.dart';
 
 class Profile extends StatefulWidget {
   const Profile({Key? key}) : super(key: key);
@@ -82,9 +83,16 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
 
       // Kiểm tra xem tải hình ảnh thành công hay không
       if (response.statusCode == 200) {
-        // Lưu hình ảnh vào biến _image
+        // Tạo một tệp tạm thời để lưu hình ảnh được tải xuống
+        File tempImage =
+            File('${(await getTemporaryDirectory()).path}/temp_image.jpg');
+
+        // Ghi dữ liệu của hình ảnh vào tệp tạm thời
+        await tempImage.writeAsBytes(response.bodyBytes);
+
+        // Gán hình ảnh từ tệp tạm thời cho biến _image
         setState(() {
-          _image = File(imageUrl);
+          _image = tempImage;
         });
       } else {
         // Xử lý khi không tải được hình ảnh
