@@ -2,25 +2,25 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Chatpage extends StatefulWidget {
-  const Chatpage({super.key});
+class CreateCV extends StatefulWidget {
+  const CreateCV({super.key});
 
   @override
-  State<Chatpage> createState() => _ChatpageState();
+  State<CreateCV> createState() => _CreateCVState();
 }
 
-class _ChatpageState extends State<Chatpage> {
+class _CreateCVState extends State<CreateCV> {
   int _currentIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chat Page'),
+        title: Text('CreateCV'),
       ),
       body: Center(
         child: Text(
-          'Chat',
+          'CreateCV',
           style: TextStyle(fontSize: 24.0),
         ),
       ),

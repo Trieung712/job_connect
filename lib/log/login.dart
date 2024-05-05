@@ -2,7 +2,7 @@
 
 import 'package:my_app/log/forgotpassword.dart';
 import 'package:my_app/navigation.dart';
-import 'package:my_app/screen/home.dart';
+import 'package:my_app/screen/Home.dart';
 import 'package:my_app/service/auth.dart';
 import 'package:my_app/log/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';

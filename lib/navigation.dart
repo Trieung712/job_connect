@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:my_app/screen/home.dart';
-import 'package:my_app/screen/chat.dart';
+import 'package:my_app/screen/Home.dart';
+import 'package:my_app/screen/createCV.dart';
 import 'package:my_app/screen/profile.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 
@@ -17,7 +17,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
   @override
   final List<Widget> screens = const [
     Home(),
-    Chatpage(),
+    CreateCV(),
     Profile(),
   ];
   @override
