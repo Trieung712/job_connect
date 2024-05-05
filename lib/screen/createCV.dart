@@ -2,6 +2,8 @@ import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'InputScreen.dart';
+
 class CreateCV extends StatefulWidget {
   const CreateCV({super.key});
 
@@ -14,14 +16,26 @@ class _CreateCVState extends State<CreateCV> {
 
   @override
   Widget build(BuildContext context) {
+    return MaterialApp(
+      home: createScreen(),
+    );
+  }
+}
+
+class createScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('CreateCV'),
-      ),
       body: Center(
-        child: Text(
-          'CreateCV',
-          style: TextStyle(fontSize: 24.0),
+        child: ElevatedButton(
+          onPressed: () {
+            // Điều hướng đến màn hình nhập thông tin mới
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => UserInfoScreen()),
+            );
+          },
+          child: Text('Tạo CV của bạn ngay'),
         ),
       ),
     );

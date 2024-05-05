@@ -1,3 +1,4 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:my_app/firebase_options.dart';
 import 'package:my_app/log/forgotpassword.dart';
 import 'package:my_app/log/login.dart';
@@ -7,8 +8,10 @@ import 'package:flutter/material.dart';
 import 'navigation.dart';
 
 void main() async {
+  await dotenv.load(fileName: ".env");
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   runApp(const MyApp());
 }
 
