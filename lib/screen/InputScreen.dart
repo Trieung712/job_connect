@@ -343,6 +343,9 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                     showDialog(
                       context: context,
                       builder: (context) {
+                        String tempDescription = generatedDescription ?? '';
+                        TextEditingController descriptionController =
+                            TextEditingController(text: tempDescription);
                         return AlertDialog(
                           title: Text('Generated Description'),
                           content: SingleChildScrollView(
@@ -350,67 +353,38 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                               mainAxisSize: MainAxisSize.min,
                               children: <Widget>[
                                 TextField(
-                                  readOnly: true,
-                                  controller: TextEditingController(
-                                      text: generatedDescription),
+                                  controller: descriptionController,
                                   maxLines: null,
+                                  onChanged: (value) {
+                                    tempDescription = value;
+                                  },
                                 ),
+                                SizedBox(height: 10),
+                                Text(
+                                  'CẨN THẬN KHI SỬ DỤNG.'
+                                  '\nĐây là nội dung tạo từ AI, nó có thể sai sót.'
+                                  '\nHãy chỉnh sửa theo ý bạn ',
+                                  style: TextStyle(color: Colors.red),
+                                ), // Thêm dòng thông báo màu đỏ
                                 SizedBox(height: 10),
                                 ElevatedButton(
                                   onPressed: () async {
-                                    String? englishDescription =
-                                        await translateToEnglish(
-                                            generatedDescription!);
+                                    setState(() {
+                                      additionalDescription = tempDescription;
+                                    });
                                     Navigator.pop(context);
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                          title: Text('English Description'),
-                                          content: SingleChildScrollView(
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: <Widget>[
-                                                Text(englishDescription ?? ''),
-                                              ],
-                                            ),
-                                          ),
-                                          actions: <Widget>[
-                                            ElevatedButton(
-                                              onPressed: () {
-                                                setState(() {
-                                                  additionalDescription =
-                                                      englishDescription ?? '';
-                                                });
-                                                Navigator.pop(context);
-                                              },
-                                              child: Text('OK'),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
+                                    // Thực hiện các tác vụ khác ở đây sau khi mô tả được lưu
+                                    // Ví dụ: điều hướng đến màn hình khác, gửi dữ liệu đến máy chủ, vv.
                                   },
-                                  child: Text('Translate to English'),
+                                  child: Text('Lưu mô tả'),
                                 ),
                               ],
                             ),
                           ),
-                          actions: <Widget>[
-                            ElevatedButton(
-                              onPressed: () {
-                                setState(() {
-                                  additionalDescription =
-                                      generatedDescription ?? '';
-                                });
-                                Navigator.pop(context);
-                              },
-                              child: Text('OK'),
-                            ),
-                          ],
                         );
                       },
                     );
+                    ;
                   } catch (e) {
                     print('Failed to generate description: $e');
                     showDialog(

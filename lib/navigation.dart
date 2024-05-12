@@ -105,7 +105,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
 
   List<BottomNavigationBarItem> _getBottomNavigationBarItems(int userRole) {
     if (userRole == 1) {
-      return const <BottomNavigationBarItem>[
+      return <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
           label: 'Home',
@@ -124,7 +124,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
         ),
       ];
     } else {
-      return const <BottomNavigationBarItem>[
+      return <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
           label: 'Home',

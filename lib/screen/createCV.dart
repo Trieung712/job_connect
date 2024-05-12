@@ -1,41 +1,43 @@
-import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
 import 'InputScreen.dart';
 
 class CreateCV extends StatefulWidget {
-  const CreateCV({super.key});
+  const CreateCV({Key? key}) : super(key: key);
 
   @override
   State<CreateCV> createState() => _CreateCVState();
 }
 
 class _CreateCVState extends State<CreateCV> {
-  int _currentIndex = 0;
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: createScreen(),
-    );
-  }
-}
-
-class createScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: ElevatedButton(
-          onPressed: () {
-            // Điều hướng đến màn hình nhập thông tin mới
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => UserInfoScreen()),
-            );
-          },
-          child: Text('Tạo CV của bạn ngay'),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0), // Thêm padding cho nút
+          child: ElevatedButton(
+            onPressed: () {
+              // Điều hướng đến màn hình nhập thông tin mới
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => UserInfoScreen()),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              foregroundColor: Colors.white,
+              backgroundColor: Colors.blue, // Màu chữ trên nút
+              padding: EdgeInsets.symmetric(
+                  horizontal: 50, vertical: 20), // Kích thước nút
+              shape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.circular(10), // Định dạng hình dạng của nút
+              ),
+            ),
+            child: Text(
+              'Tạo CV của bạn ngay',
+              style: TextStyle(fontSize: 20), // Cỡ chữ của nút
+            ),
+          ),
         ),
       ),
     );

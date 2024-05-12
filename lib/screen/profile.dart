@@ -99,11 +99,11 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
         });
       } else {
         // Xử lý khi không tải được hình ảnh
-        print('Failed to load image: ${response.statusCode}');
+        print('Không ti được ảnh: ${response.statusCode}');
       }
     } catch (e) {
       // Xử lý khi có lỗi xảy ra
-      print('Error loading image: $e');
+      print('Lỗi khi tải ảnh: $e');
     }
   }
 
@@ -114,7 +114,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
       if (pickedFile != null) {
         _image = File(pickedFile.path);
       } else {
-        print('No image selected.');
+        print('Không có ảnh nào được chọn.');
       }
     });
   }
@@ -164,7 +164,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                             Padding(
                               padding: EdgeInsets.only(left: 25.0),
                               child: Text(
-                                'PROFILE',
+                                'HỒ SƠ',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   fontSize: 20.0,
@@ -234,7 +234,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                                 mainAxisSize: MainAxisSize.min,
                                 children: <Widget>[
                                   Text(
-                                    'Personal Information',
+                                    'Thông tin cá nhân',
                                     style: TextStyle(
                                       fontSize: 18.0,
                                       fontWeight: FontWeight.bold,
@@ -263,7 +263,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                                 mainAxisSize: MainAxisSize.min,
                                 children: <Widget>[
                                   Text(
-                                    'Name',
+                                    'Tên',
                                     style: TextStyle(
                                       fontSize: 16.0,
                                       fontWeight: FontWeight.bold,
@@ -284,7 +284,8 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                                 child: TextField(
                                   controller: _nameController,
                                   decoration: InputDecoration(
-                                    hintText: "Enter Your Full Name",
+                                    hintText:
+                                        "Nhập tên đầy đủ của bạn(hoặc tên công ty)",
                                   ),
                                   enabled: !_status,
                                   autofocus: !_status,
@@ -304,7 +305,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                                 mainAxisSize: MainAxisSize.min,
                                 children: <Widget>[
                                   Text(
-                                    'Email ID',
+                                    'Email của bạn',
                                     style: TextStyle(
                                       fontSize: 16.0,
                                       fontWeight: FontWeight.bold,
@@ -325,7 +326,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                                 child: TextField(
                                   controller: _emailController,
                                   decoration: InputDecoration(
-                                    hintText: "Enter Your Email",
+                                    hintText: "Nhập Email của bạn",
                                   ),
                                   enabled: !_status,
                                 ),
@@ -344,7 +345,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                                 mainAxisSize: MainAxisSize.min,
                                 children: <Widget>[
                                   Text(
-                                    'Phone Number',
+                                    'Số điện thoại',
                                     style: TextStyle(
                                       fontSize: 16.0,
                                       fontWeight: FontWeight.bold,
@@ -365,7 +366,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                                 child: TextField(
                                   controller: _phoneController,
                                   decoration: InputDecoration(
-                                    hintText: "Enter Phone Number",
+                                    hintText: "Nhập số điện thoại",
                                   ),
                                   enabled: !_status,
                                 ),
@@ -379,7 +380,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                             onPressed: () {
                               _showLogoutConfirmationDialog(context);
                             },
-                            child: Text('Logout'),
+                            child: Text('Đăng xuất'),
                           ),
                         ),
                         !_status ? _getActionButtons() : Container(),
@@ -412,7 +413,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                     _saveProfileData();
                   },
                   child: Text(
-                    "Save",
+                    "Lưu",
                     style: TextStyle(color: Colors.white),
                   ),
                   style: ButtonStyle(

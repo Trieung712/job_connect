@@ -130,7 +130,7 @@ class _AddScreenState extends State<AddScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Add New Information'),
+          title: Text('Tạo bài đăng mới'),
           automaticallyImplyLeading: false,
         ),
         body: SingleChildScrollView(
@@ -141,7 +141,7 @@ class _AddScreenState extends State<AddScreen> {
               children: [
                 TextField(
                   decoration: InputDecoration(
-                    labelText: 'What do you want to share?',
+                    labelText: 'Nhập tiêu đề bài đăng',
                     border: OutlineInputBorder(),
                   ),
                   controller: _titleController,
@@ -149,7 +149,7 @@ class _AddScreenState extends State<AddScreen> {
                 SizedBox(height: 16),
                 TextField(
                   decoration: InputDecoration(
-                    labelText: 'Write something...',
+                    labelText: 'Thông tin chi tiết',
                     border: OutlineInputBorder(),
                   ),
                   controller: _informationController,
@@ -196,19 +196,22 @@ class _AddScreenState extends State<AddScreen> {
                   onPressed: getImage,
                   icon: Icon(Icons.photo, color: Colors.white),
                   label:
-                      Text('Add Photo', style: TextStyle(color: Colors.white)),
+                      Text('Thêm ảnh', style: TextStyle(color: Colors.white)),
                   style: TextButton.styleFrom(
                     backgroundColor: Colors.blueAccent,
                     padding: EdgeInsets.symmetric(vertical: 12),
                   ),
                 ),
-                SizedBox(height: 16),
+                SizedBox(height: 15),
                 ElevatedButton(
                   onPressed: _submitData,
-                  child: Text('Post', style: TextStyle(color: Colors.white)),
+                  child:
+                      Text('Đăng bài', style: TextStyle(color: Colors.white)),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blueGrey,
-                    padding: EdgeInsets.symmetric(vertical: 12),
+                    padding: EdgeInsets.symmetric(
+                      vertical: 12,
+                    ),
                   ),
                 ),
               ],
