@@ -67,7 +67,28 @@ class _NavigationMenuState extends State<NavigationMenu> {
     }
 
     if (_isLoading) {
-      return CircularProgressIndicator(); // Hoặc một tiêu đề loading khác
+      return Container(
+        color: Colors.white, // Set the background color
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(
+                    Colors.blue), // Customize the color
+              ),
+              SizedBox(height: 20), // Add some spacing
+              Text(
+                'Loading...', // Add a text indicating loading
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
     }
 
     List<Widget> _screens = _getScreens(userRole);
