@@ -1,5 +1,3 @@
-// ignore_for_file: use_build_context_synchronously
-
 import 'package:my_app/log/forgotpassword.dart';
 import 'package:my_app/navigation.dart';
 import 'package:my_app/screen/Home.dart';
@@ -7,6 +5,8 @@ import 'package:my_app/service/auth.dart';
 import 'package:my_app/log/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import '../sharedPreferences.dart';
 
 class LogIn extends StatefulWidget {
   const LogIn({super.key});
@@ -23,10 +23,13 @@ class _LogInState extends State<LogIn> {
 
   final _formkey = GlobalKey<FormState>();
 
-  userLogin() async {
+  void userLogin() async {
     try {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
+      await SharedPreferencesManager.saveLoginStatus(
+          email); // Lưu trạng thái đăng nhập
+
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => NavigationMenu()));
     } on FirebaseAuthException catch (e) {

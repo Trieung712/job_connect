@@ -2,6 +2,7 @@ import 'package:my_app/screen/Home.dart';
 import 'package:my_app/log/login.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; // Thêm thư viện firestore
 
 class SignUp extends StatefulWidget {
   const SignUp({super.key});
@@ -12,6 +13,9 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   String email = "", password = "", name = "";
+  String?
+      selectedRole; // Thêm dấu "?" sau kiểu dữ liệu để cho phép giá trị null
+
   TextEditingController namecontroller = new TextEditingController();
   TextEditingController passwordcontroller = new TextEditingController();
   TextEditingController mailcontroller = new TextEditingController();
@@ -25,6 +29,14 @@ class _SignUpState extends State<SignUp> {
       try {
         UserCredential userCredential = await FirebaseAuth.instance
             .createUserWithEmailAndPassword(email: email, password: password);
+        String role = selectedRole == "HR" ? "1" : "2";
+        await FirebaseFirestore.instance
+            .collection("users")
+            .doc(userCredential.user!.uid)
+            .set({
+          "name": namecontroller.text,
+          "role": role,
+        });
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
           "Registered Successfully",
@@ -95,6 +107,45 @@ class _SignUpState extends State<SignUp> {
                             hintStyle: TextStyle(
                                 color: Color(0xFFb2b7bf), fontSize: 18.0)),
                       ),
+                    ),
+                    SizedBox(
+                      height: 30.0,
+                    ),
+                    DropdownButtonFormField<String>(
+                      value: selectedRole,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedRole = value!;
+                        });
+                      },
+                      decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                          borderRadius:
+                              BorderRadius.circular(30.0), // Bo tròn các góc
+                          borderSide:
+                              BorderSide(color: Colors.white), // Loại bỏ viền
+                        ),
+                        filled:
+                            true, // Đặt filled thành true để có thể sử dụng màu nền
+                        fillColor: Color(0xFFedf0f8), // Chọn màu xám cho nền
+                        labelText: 'Bạn là ai',
+                        labelStyle: TextStyle(
+                            color: Color(0xFFb2b7bf),
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold),
+                        hintText: 'Chọn vai trò',
+                        hintStyle: TextStyle(
+                            color: Color(0xFFb2b7bf),
+                            fontSize: 18.0,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      items: ["HR", "Student"]
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
                     ),
                     SizedBox(
                       height: 30.0,
