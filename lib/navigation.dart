@@ -5,6 +5,7 @@ import 'package:my_app/screen/Home.dart';
 import 'package:my_app/screen/addScreen.dart';
 import 'package:my_app/screen/createCV.dart';
 import 'package:my_app/screen/profile.dart';
+import 'package:my_app/screen/waitingPost.dart';
 
 class NavigationMenu extends StatefulWidget {
   const NavigationMenu({Key? key}) : super(key: key);
@@ -115,9 +116,17 @@ class _NavigationMenuState extends State<NavigationMenu> {
         CreateCV(),
         Profile(),
       ];
+    } else if (userRole == 2) {
+      return <Widget>[
+        Home(),
+        CreateCV(),
+        Profile(),
+      ];
     } else {
       return <Widget>[
         Home(),
+        AddScreen(),
+        WaitingPost(),
         CreateCV(),
         Profile(),
       ];
@@ -144,11 +153,34 @@ class _NavigationMenuState extends State<NavigationMenu> {
           label: 'Profile',
         ),
       ];
+    } else if (userRole == 2) {
+      return <BottomNavigationBarItem>[
+        BottomNavigationBarItem(
+          icon: Icon(Icons.home),
+          label: 'Home',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.create),
+          label: 'CreateCV',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.person),
+          label: 'Profile',
+        ),
+      ];
     } else {
       return <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
           label: 'Home',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.add_box_rounded),
+          label: 'Post',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.drive_folder_upload),
+          label: 'WaitPost',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.create),

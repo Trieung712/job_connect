@@ -80,7 +80,7 @@ class _AddScreenState extends State<AddScreen> {
     String imageURL = await taskSnapshot.ref.getDownloadURL();
     DateTime currentTime = DateTime.now();
     // Thêm dữ liệu vào Firestore
-    await FirebaseFirestore.instance.collection('post_from_admin').add({
+    await FirebaseFirestore.instance.collection('waiting_posts').add({
       'name': _userName,
       'title': enteredTitle,
       'information': enteredInformation,

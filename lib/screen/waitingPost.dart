@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'DetailForAdmin.dart';
 
-import 'DetailScreen.dart';
-
-class Home extends StatefulWidget {
-  const Home({Key? key});
+class WaitingPost extends StatefulWidget {
+  const WaitingPost({Key? key});
 
   @override
-  State<Home> createState() => _HomeState();
+  State<WaitingPost> createState() => _WaitingPostState();
 }
 
-class _HomeState extends State<Home> {
+class _WaitingPostState extends State<WaitingPost> {
   bool _isBackPressed = false;
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -49,9 +49,8 @@ class _HomeState extends State<Home> {
         ),
         body: StreamBuilder(
           stream: FirebaseFirestore.instance
-              .collection('post_from_hr')
-              .orderBy('timestamp',
-                  descending: true) // Sắp xếp theo thời gian giảm dần
+              .collection('waiting_posts')
+              .orderBy('timestamp', descending: true)
               .snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -69,13 +68,16 @@ class _HomeState extends State<Home> {
                 var name = document['name'];
                 var title = document['title'];
                 var information = document['information'];
-                var imageURL = document['imageURL']; // Thêm trường imageURL
+                var imageURL = document['imageURL'];
+                var postId = document.id; // Lấy postId từ document ID
 
                 return InfoTile(
-                    name: name,
-                    title: title,
-                    information: information,
-                    imageURL: imageURL);
+                  name: name,
+                  title: title,
+                  imageURL: imageURL,
+                  information: information,
+                  postId: postId,
+                );
               }).toList(),
             );
           },
@@ -90,6 +92,7 @@ class InfoTile extends StatelessWidget {
   final String title;
   final String imageURL;
   final String information;
+  final String postId;
 
   const InfoTile({
     Key? key,
@@ -97,23 +100,23 @@ class InfoTile extends StatelessWidget {
     required this.title,
     required this.imageURL,
     required this.information,
+    required this.postId,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    // Cắt chuỗi thông tin để chỉ hiển thị một dòng
     String shortInformation = information.split('\n').first;
 
     return Card(
       child: ListTile(
         leading: SizedBox(
-          width: 100, // Đặt chiều rộng cố định cho hình ảnh
-          height: 100, // Đặt chiều cao cố định cho hình ảnh
+          width: 100,
+          height: 100,
           child: Image.network(
             imageURL,
-            fit: BoxFit.cover, // Để ảnh scale để vừa với kích thước khung
+            fit: BoxFit.cover,
           ),
-        ), // Hiển thị ảnh bên trái
+        ),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -128,9 +131,8 @@ class InfoTile extends StatelessWidget {
             Text(
               shortInformation,
               style: TextStyle(color: Colors.blue),
-              maxLines: 1, // Chỉ hiển thị một dòng
-              overflow: TextOverflow
-                  .ellipsis, // Hiển thị dấu chấm cuối dòng nếu vượt quá
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),
@@ -138,11 +140,12 @@ class InfoTile extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => DetailScreen(
+              builder: (context) => DetailForAdminScreen(
                 name: name,
                 title: title,
                 imageURL: imageURL,
                 information: information,
+                postId: postId,
               ),
             ),
           );
