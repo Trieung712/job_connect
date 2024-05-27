@@ -68,7 +68,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
           // Ảnh nền
           Positioned.fill(
             child: Image.asset(
-              'images/sp_back.jpg', // Đường dẫn đến ảnh nền của bạn
+              'images/back_test.jpg', // Đường dẫn đến ảnh nền của bạn
               fit: BoxFit.cover,
             ),
           ),
@@ -84,12 +84,12 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                     },
                     child: CircleAvatar(
                       radius: 60,
-                      backgroundColor: Colors.grey[200],
+                      backgroundColor: Colors.lightBlueAccent,
                       child: _image == null
                           ? Icon(
                               Icons.person,
                               size: 60,
-                              color: Colors.grey,
+                              color: Colors.black,
                             )
                           : ClipOval(
                               child: Image.file(
@@ -104,7 +104,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                   SizedBox(height: 20),
                   TextFormField(
                     decoration: InputDecoration(
-                      labelText: 'Name',
+                      labelText: 'Tên của bạn',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(50.0),
                       ),
@@ -137,7 +137,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                   SizedBox(height: 20),
                   TextFormField(
                     decoration: InputDecoration(
-                      labelText: 'Date of Birth',
+                      labelText: 'Ngày sinh',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(50.0),
                       ),
@@ -154,7 +154,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                   SizedBox(height: 20),
                   TextFormField(
                     decoration: InputDecoration(
-                      labelText: 'Profession',
+                      labelText: 'Chuyên môn',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(50.0),
                       ),
@@ -171,7 +171,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                   SizedBox(height: 20),
                   TextFormField(
                     decoration: InputDecoration(
-                      labelText: 'Organization',
+                      labelText: 'Nơi học tập/làm việc ',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(50.0),
                       ),
@@ -188,7 +188,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                   SizedBox(height: 20),
                   TextFormField(
                     decoration: InputDecoration(
-                      labelText: 'Experience',
+                      labelText: 'Kinh nghiệm',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(50.0),
                       ),
@@ -205,7 +205,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                   SizedBox(height: 20),
                   TextFormField(
                     decoration: InputDecoration(
-                      labelText: 'Phone',
+                      labelText: 'Số điện thoại',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(50.0),
                       ),
@@ -222,7 +222,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                   SizedBox(height: 20),
                   TextFormField(
                     decoration: InputDecoration(
-                      labelText: 'Address',
+                      labelText: 'Địa chỉ',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(50.0),
                       ),
@@ -239,7 +239,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                   SizedBox(height: 20),
                   TextFormField(
                     decoration: InputDecoration(
-                      labelText: 'Facebook',
+                      labelText: 'Link Facebook',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(50.0),
                       ),
@@ -256,7 +256,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                   SizedBox(height: 20),
                   TextFormField(
                     decoration: InputDecoration(
-                      labelText: 'University',
+                      labelText: 'Đại học đã tốt nghiệp',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(50.0),
                       ),
@@ -273,7 +273,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                   SizedBox(height: 20),
                   TextFormField(
                     decoration: InputDecoration(
-                      labelText: 'Language',
+                      labelText: 'Khả năng ngôn ngữ',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(50.0),
                       ),
@@ -290,7 +290,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                   SizedBox(height: 20),
                   TextFormField(
                     decoration: InputDecoration(
-                      labelText: 'Certificates',
+                      labelText: 'Các chứng chỉ đã có',
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(50.0),
                       ),
@@ -309,14 +309,14 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Skills',
+                        'Kĩ năng',
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       SizedBox(height: 10),
-                      Text('Office'),
+                      Text('Văn phòng'),
                       FlutterSlider(
                         values: [officeSkill],
                         max: 1,
@@ -345,7 +345,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                               Icon(Icons.circle, color: Colors.white, size: 20),
                         ),
                       ),
-                      Text('English'),
+                      Text('Ngoại ngữ'),
                       FlutterSlider(
                         values: [englishSkill],
                         max: 1,
@@ -374,7 +374,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                               Icon(Icons.circle, color: Colors.white, size: 20),
                         ),
                       ),
-                      Text('Communication'),
+                      Text('Giao tiếp'),
                       FlutterSlider(
                         values: [communicationSkill],
                         max: 1,
@@ -403,7 +403,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                               Icon(Icons.circle, color: Colors.white, size: 20),
                         ),
                       ),
-                      Text('Teamwork'),
+                      Text('Làm việc nhóm'),
                       FlutterSlider(
                         values: [teamworkSkill],
                         max: 1,
@@ -432,7 +432,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                               Icon(Icons.circle, color: Colors.white, size: 20),
                         ),
                       ),
-                      Text('Management'),
+                      Text('Quản lí thời gian'),
                       FlutterSlider(
                         values: [managementSkill],
                         max: 1,
@@ -466,7 +466,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                   SizedBox(height: 20),
                   TextFormField(
                     decoration: InputDecoration(
-                      labelText: 'Additional Description',
+                      labelText: 'Mô tả thêm',
                     ),
                     maxLines: null,
                     onChanged: (value) {
@@ -495,7 +495,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                             TextEditingController descriptionController =
                                 TextEditingController(text: tempDescription);
                             return AlertDialog(
-                              title: Text('Generated Description'),
+                              title: Text('Tạo mô tả'),
                               content: SingleChildScrollView(
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
@@ -535,19 +535,19 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                         );
                         ;
                       } catch (e) {
-                        print('Failed to generate description: $e');
+                        print('Không tạo được mô tả: $e');
                         showDialog(
                           context: context,
                           builder: (context) {
                             return AlertDialog(
                               title: Text('Error'),
-                              content: Text('Failed to generate description.'),
+                              content: Text('Không tạo được mô tả.'),
                               actions: <Widget>[
                                 ElevatedButton(
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
-                                  child: Text('Close'),
+                                  child: Text('Đóng'),
                                 ),
                               ],
                             );
@@ -555,7 +555,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                         );
                       }
                     },
-                    child: Text('Create Description'),
+                    child: Text('Tạo mô tả'),
                   ),
                   SizedBox(height: 20),
                   ElevatedButton(
@@ -587,7 +587,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                         ),
                       );
                     },
-                    child: Text('Create CV'),
+                    child: Text('Tạo CV'),
                   ),
                 ],
               ),

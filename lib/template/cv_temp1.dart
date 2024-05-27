@@ -1,10 +1,15 @@
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:screenshot/screenshot.dart';
 
 class CVTemplate extends StatelessWidget {
+  final ScreenshotController screenshotController = ScreenshotController();
+
   final String name;
   final String email;
   final String dob;
@@ -24,7 +29,7 @@ class CVTemplate extends StatelessWidget {
   final double communicationSkill;
   final double teamworkSkill;
   final double managementSkill;
-  const CVTemplate({
+  CVTemplate({
     required this.name,
     required this.email,
     required this.dob,
@@ -51,180 +56,271 @@ class CVTemplate extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Template 1"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.download),
+            onPressed: () async {
+              await _savePdf(context);
+            },
+          ),
+        ],
       ),
-      body: SingleChildScrollView(
-        child: Row(
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width * 0.5,
-              height: MediaQuery.of(context).size.height,
-              decoration: BoxDecoration(color: Colors.orange, boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 5,
-                  blurRadius: 7,
-                  offset: const Offset(5, 0), // changes position of shadow
-                ),
-              ]),
-              child: Column(
-                children: [
-                  const SizedBox(
-                    height: 20,
+      body: Screenshot(
+        controller: screenshotController,
+        child: SingleChildScrollView(
+          child: Row(
+            children: [
+              Container(
+                width: MediaQuery.of(context).size.width * 0.5,
+                height: MediaQuery.of(context).size.height,
+                decoration: BoxDecoration(color: Colors.orange, boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: const Offset(5, 0), // changes position of shadow
                   ),
-                  image != null
-                      ? CircleAvatar(
-                          radius: 60,
-                          backgroundImage: FileImage(image!),
-                        )
-                      : const CircleAvatar(
-                          radius: 60,
-                          backgroundColor: Colors.amber,
-
-                          // Thêm ảnh đại diện
-                        ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  TitleText(
-                    txt: name,
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
-                  Text(
-                    profession,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
+                ]),
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 20,
                     ),
-                  ),
-                  const BodyText(),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  TitleText(txt: "Contact me"),
-                  ContactWidget(
-                    ico: Icons.mail,
-                    text: email,
-                  ),
-                  ContactWidget(
-                    ico: Icons.phone,
-                    text: phone,
-                  ),
-                  ContactWidget(
-                    ico: Icons.pin_drop,
-                    text: address,
-                  ),
-                  ContactWidget(
-                    ico: Icons.facebook,
-                    text: linkedIn,
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  TitleText(txt: "Skills"),
-                  SizedBox(
-                    height: 25,
-                  ),
-                  SkillProgress(
-                    skill: "Office",
-                    prog: officeSkill,
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  SkillProgress(
-                    skill: "English",
-                    prog: englishSkill,
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  SkillProgress(
-                    skill: "Communication",
-                    prog: communicationSkill,
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  SkillProgress(
-                    skill: "Teamwork",
-                    prog: teamworkSkill,
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  SkillProgress(
-                    skill: "Management",
-                    prog: managementSkill,
-                  ),
-                ],
+                    image != null
+                        ? CircleAvatar(
+                            radius: 60,
+                            backgroundImage: FileImage(image!),
+                          )
+                        : const CircleAvatar(
+                            radius: 60,
+                            backgroundColor: Colors.amber,
+
+                            // Thêm ảnh đại diện
+                          ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TitleText(
+                      txt: name,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      profession,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                      ),
+                    ),
+                    TitleText(txt: "Contact me"),
+                    ContactWidget(
+                      ico: Icons.mail,
+                      text: email,
+                    ),
+                    ContactWidget(
+                      ico: Icons.phone,
+                      text: phone,
+                    ),
+                    ContactWidget(
+                      ico: Icons.pin_drop,
+                      text: address,
+                    ),
+                    ContactWidget(
+                      ico: Icons.facebook,
+                      text: linkedIn,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    TitleText(txt: "Skills"),
+                    SizedBox(
+                      height: 15,
+                    ),
+                    SkillProgress(
+                      skill: "Office",
+                      prog: officeSkill,
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    SkillProgress(
+                      skill: "English",
+                      prog: englishSkill,
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    SkillProgress(
+                      skill: "Communication",
+                      prog: communicationSkill,
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    SkillProgress(
+                      skill: "Teamwork",
+                      prog: teamworkSkill,
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    SkillProgress(
+                      skill: "Management",
+                      prog: managementSkill,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width * 0.5,
-              height: MediaQuery.of(context).size.height,
-              child: Column(
-                children: [
-                  SizedBox(
-                    height: 15,
-                  ),
-                  SecTitleTxt(
-                    txt: "Education",
-                  ),
-                  FullEdu(
-                    txt1: university,
-                    txt2: university,
-                  ),
-                  SecTitleTxt(
-                    txt: "Experience",
-                  ),
-                  FullEdu(
-                    txt1: experience,
-                    txt2: experience,
-                  ),
-                  SecTitleTxt(
-                    txt: "Languages",
-                  ),
-                  FullEdu(
-                    txt1: programmingLanguages,
-                    txt2: programmingLanguages,
-                  ),
-                  FullEdu(
-                    txt1: "English",
-                    txt2: "German",
-                  ),
-                  SecTitleTxt(
-                    txt: "Certificates",
-                  ),
-                  FullEdu(
-                    txt1: certifications,
-                    txt2: certifications,
-                  ),
-                  SecTitleTxt(
-                    txt: "Description",
-                  ),
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: SingleChildScrollView(
-                        child: Text(
-                          additionalDescription,
-                          style: TextStyle(
-                            fontSize: 18,
-                            color: Colors.amber,
+              SizedBox(
+                width: MediaQuery.of(context).size.width * 0.5,
+                height: MediaQuery.of(context).size.height,
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 15,
+                    ),
+                    SecTitleTxt(
+                      txt: "Education",
+                    ),
+                    FullEdu(
+                      txt1: university,
+                      txt2: university,
+                    ),
+                    SecTitleTxt(
+                      txt: "Experience",
+                    ),
+                    FullEdu(
+                      txt1: experience,
+                      txt2: experience,
+                    ),
+                    SecTitleTxt(
+                      txt: "Languages",
+                    ),
+                    FullEdu(
+                      txt1: programmingLanguages,
+                      txt2: programmingLanguages,
+                    ),
+                    SecTitleTxt(
+                      txt: "Certificates",
+                    ),
+                    FullEdu(
+                      txt1: certifications,
+                      txt2: certifications,
+                    ),
+                    SecTitleTxt(
+                      txt: "Description",
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: SingleChildScrollView(
+                          child: Text(
+                            additionalDescription,
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: Colors.amber,
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            )
-          ],
+                  ],
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );
+  }
+
+  Future<void> _savePdf(BuildContext context) async {
+    if (await Permission.storage.request().isGranted) {
+      final String? fileName = await _getFileName(context);
+      if (fileName != null) {
+        final pdfFile = await _generatePdf(context, fileName);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('PDF saved to ${pdfFile.path}')),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Please enter a valid file name')),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Permission to access storage was denied')),
+      );
+    }
+  }
+
+  Future<String?> _getFileName(BuildContext context) async {
+    String? fileName;
+    await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Enter file name', style: TextStyle(color: Colors.blue)),
+        content: TextField(
+          onChanged: (value) {
+            fileName = value;
+          },
+          style: TextStyle(color: Colors.black),
+          decoration: InputDecoration(
+            hintText: 'Enter file name',
+            hintStyle: TextStyle(color: Colors.grey),
+            border: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.blue),
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('Cancel', style: TextStyle(color: Colors.blue)),
+          ),
+          TextButton(
+            onPressed: () {
+              if (fileName != null && fileName!.isNotEmpty) {
+                Navigator.of(context).pop(fileName);
+              } else {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Please enter a valid file name')),
+                );
+              }
+            },
+            child: Text('Save', style: TextStyle(color: Colors.blue)),
+          ),
+        ],
+      ),
+    );
+    return fileName;
+  }
+
+  Future<File> _generatePdf(BuildContext context, String fileName) async {
+    final pdf = pw.Document();
+
+    final imageBytes = await screenshotController.capture(pixelRatio: 2.0);
+
+    pdf.addPage(
+      pw.Page(
+        build: (pw.Context context) {
+          return pw.Image(pw.MemoryImage(imageBytes!));
+        },
+      ),
+    );
+
+    final downloadsDirectory = await getDownloadsDirectory();
+    if (downloadsDirectory == null) {
+      throw Exception("Could not get the downloads directory");
+    }
+
+    final file = File("${downloadsDirectory.path}/$fileName.pdf");
+    await file.writeAsBytes(await pdf.save());
+
+    return file;
   }
 }
 

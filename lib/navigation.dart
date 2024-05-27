@@ -6,6 +6,7 @@ import 'package:my_app/screen/addScreen.dart';
 import 'package:my_app/screen/createCV.dart';
 import 'package:my_app/screen/profile.dart';
 import 'package:my_app/screen/waitingPost.dart';
+import 'package:my_app/screen/notification.dart';
 
 class NavigationMenu extends StatefulWidget {
   const NavigationMenu({Key? key}) : super(key: key);
@@ -114,6 +115,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
         Home(),
         AddScreen(),
         CreateCV(),
+        NotiScreen(),
         Profile(),
       ];
     } else if (userRole == 2) {
@@ -138,45 +140,49 @@ class _NavigationMenuState extends State<NavigationMenu> {
       return <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
-          label: 'Home',
+          label: 'Trang chính',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.add_box_rounded),
-          label: 'Post',
+          label: 'Đăng bài',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.create),
-          label: 'CreateCV',
+          label: 'Tạo CV',
+        ),
+        BottomNavigationBarItem(
+          icon: Icon(Icons.notifications),
+          label: 'Thông báo',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person),
-          label: 'Profile',
+          label: 'Hồ sơ',
         ),
       ];
     } else if (userRole == 2) {
       return <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
-          label: 'Home',
+          label: 'Trang chính',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.create),
-          label: 'CreateCV',
+          label: 'Tạo CV',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person),
-          label: 'Profile',
+          label: 'Hồ sơ',
         ),
       ];
     } else {
       return <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
-          label: 'Home',
+          label: 'Trang chính',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.add_box_rounded),
-          label: 'Post',
+          label: 'Đăng bài',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.drive_folder_upload),
@@ -184,11 +190,11 @@ class _NavigationMenuState extends State<NavigationMenu> {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.create),
-          label: 'CreateCV',
+          label: 'Tạo CV',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person),
-          label: 'Profile',
+          label: 'Hồ sơ',
         ),
       ];
     }

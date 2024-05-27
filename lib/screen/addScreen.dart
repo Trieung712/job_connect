@@ -5,7 +5,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:fluttertoast/fluttertoast.dart'; // Import package fluttertoast
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 
 class AddScreen extends StatefulWidget {
   const AddScreen({Key? key}) : super(key: key);
@@ -20,16 +21,15 @@ class _AddScreenState extends State<AddScreen> {
   File? _image;
   final picker = ImagePicker();
   late String _userName;
-  DateTime? _lastPressedAt; // Track last time back button was pressed
-  bool _isBackPressed = false; // Track if back button is pressed
+  late String _userId;
 
   @override
   void initState() {
     super.initState();
-    _getUserName();
+    _getUserInfo();
   }
 
-  Future<void> _getUserName() async {
+  Future<void> _getUserInfo() async {
     User? user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       DocumentSnapshot userDoc = await FirebaseFirestore.instance
@@ -38,6 +38,7 @@ class _AddScreenState extends State<AddScreen> {
           .get();
       setState(() {
         _userName = userDoc['name'];
+        _userId = user.uid;
       });
     }
   }
@@ -61,16 +62,14 @@ class _AddScreenState extends State<AddScreen> {
     if (enteredTitle.isEmpty ||
         enteredInformation.isEmpty ||
         _image == null ||
-        _userName.isEmpty) {
-      // Hiển thị thông báo nếu dữ liệu không đủ
+        _userName.isEmpty ||
+        _userId.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Vui lòng nhập đầy đủ các mục')),
       );
       return;
     }
 
-    // Tiếp tục xử lý khi dữ liệu đầy đủ
-    // Upload hình ảnh lên Firebase Storage
     Reference ref = FirebaseStorage.instance
         .ref()
         .child('images')
@@ -79,21 +78,22 @@ class _AddScreenState extends State<AddScreen> {
     TaskSnapshot taskSnapshot = await uploadTask;
     String imageURL = await taskSnapshot.ref.getDownloadURL();
     DateTime currentTime = DateTime.now();
-    // Thêm dữ liệu vào Firestore
+    String formattedTime =
+        DateFormat('HH:mm:ss dd/MM/yyyy').format(currentTime);
     await FirebaseFirestore.instance.collection('waiting_posts').add({
+      'userId': _userId,
       'name': _userName,
       'title': enteredTitle,
       'information': enteredInformation,
       'imageURL': imageURL,
-      'timestamp': currentTime,
+      // Lưu URL hồ sơ của người dùng
+      'timestamp': formattedTime,
     });
 
-    // Hiển thị thông báo
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Đăng bài thành công')),
+      SnackBar(content: Text('Đã gửi cho Quản trị viên phê duyệt. ')),
     );
 
-    // Xóa dữ liệu sau khi đăng thành công
     _titleController.clear();
     _informationController.clear();
     setState(() {
@@ -104,29 +104,9 @@ class _AddScreenState extends State<AddScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      // Intercept back button press
       onWillPop: () async {
-        if (_isBackPressed) {
-          // If back button is pressed twice, perform action like home button
-          SystemNavigator.pop();
-          return true; // Exit the app
-        } else {
-          // First press, set _isBackPressed to true
-          _isBackPressed = true;
-          // Show toast indicating to press again to exit
-          Fluttertoast.showToast(
-            msg: "Nhấn back lần nữa để thoát ứng dụng",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-          );
-          // Reset _isBackPressed after a certain delay (2 seconds in this case)
-          Future.delayed(Duration(seconds: 2), () {
-            setState(() {
-              _isBackPressed = false;
-            });
-          });
-          return false; // Don't exit the app
-        }
+        SystemNavigator.pop();
+        return true;
       },
       child: Scaffold(
         appBar: AppBar(

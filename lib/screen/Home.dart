@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
 import 'DetailScreen.dart';
 
 class Home extends StatefulWidget {
@@ -14,31 +13,36 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   bool _isBackPressed = false;
+  int _perPage = 10;
+  int _currentPage = 1;
+  bool _isLoadingMore = false;
+  bool _hasMoreData = true;
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      // Intercept back button press
+      // Chặn nút back
       onWillPop: () async {
         if (_isBackPressed) {
-          // If back button is pressed twice, perform action like home button
+          // Nếu nhấn nút back hai lần, thực hiện hành động như nút home
           SystemNavigator.pop();
-          return true; // Exit the app
+          return true; // Thoát ứng dụng
         } else {
-          // First press, set _isBackPressed to true
+          // Nhấn lần đầu, đặt _isBackPressed thành true
           _isBackPressed = true;
-          // Show toast indicating to press again to exit
+          // Hiển thị toast báo nhấn lại lần nữa để thoát
           Fluttertoast.showToast(
             msg: "Nhấn back lần nữa để thoát ứng dụng",
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.BOTTOM,
           );
-          // Reset _isBackPressed after a certain delay (2 seconds in this case)
+          // Đặt lại _isBackPressed sau một khoảng thời gian (2 giây trong trường hợp này)
           Future.delayed(Duration(seconds: 2), () {
             setState(() {
               _isBackPressed = false;
             });
           });
-          return false; // Don't exit the app
+          return false; // Không thoát ứng dụng
         }
       },
       child: Scaffold(
@@ -50,8 +54,8 @@ class _HomeState extends State<Home> {
         body: StreamBuilder(
           stream: FirebaseFirestore.instance
               .collection('post_from_hr')
-              .orderBy('timestamp',
-                  descending: true) // Sắp xếp theo thời gian giảm dần
+              .orderBy('timestamp', descending: true)
+              .limit(_perPage * _currentPage)
               .snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -64,74 +68,123 @@ class _HomeState extends State<Home> {
                 child: Text('Error: ${snapshot.error}'),
               );
             }
-            return ListView(
-              children: snapshot.data!.docs.map((document) {
-                var name = document['name'];
-                var title = document['title'];
-                var information = document['information'];
-                var imageURL = document['imageURL']; // Thêm trường imageURL
+            // Kiểm tra nếu còn nhiều tài liệu để tải
+            if (snapshot.data!.docs.length < _perPage * _currentPage) {
+              _hasMoreData = false;
+            }
+            return NotificationListener<ScrollNotification>(
+              onNotification: (ScrollNotification scrollInfo) {
+                if (!_isLoadingMore &&
+                    _hasMoreData &&
+                    scrollInfo.metrics.pixels ==
+                        scrollInfo.metrics.maxScrollExtent) {
+                  _loadMore();
+                  return true;
+                }
+                return false;
+              },
+              child: ListView(
+                children: [
+                  ...snapshot.data!.docs.map((document) {
+                    var name = document['name'];
+                    var title = document['title'];
+                    var information = document['information'];
+                    var imageURL = document['imageURL'];
+                    var timestamp = document['timestamp'];
+                    var userId = document['userId']; // Lấy userId từ document
 
-                return InfoTile(
-                    name: name,
-                    title: title,
-                    information: information,
-                    imageURL: imageURL);
-              }).toList(),
+                    return InfoTile(
+                      name: name,
+                      title: title,
+                      information: information,
+                      imageURL: imageURL,
+                      timestamp: timestamp,
+                      userId: userId,
+                    );
+                  }).toList(),
+                  if (!_isLoadingMore && !_hasMoreData)
+                    ListTile(
+                      title: Center(
+                        child: Text('-- BẠN ĐÃ ĐỌC TOÀN BỘ THÔNG TIN --'),
+                      ),
+                    ),
+                ],
+              ),
             );
           },
         ),
       ),
     );
   }
+
+  void _loadMore() {
+    setState(() {
+      _isLoadingMore = true;
+    });
+    _currentPage++;
+    setState(() {
+      _isLoadingMore = false;
+    });
+  }
 }
 
-class InfoTile extends StatelessWidget {
+class InfoTile extends StatefulWidget {
   final String name;
   final String title;
   final String imageURL;
   final String information;
+  final String timestamp;
+  final String userId;
 
-  const InfoTile({
+  InfoTile({
     Key? key,
     required this.name,
     required this.title,
     required this.imageURL,
     required this.information,
+    required this.timestamp,
+    required this.userId,
   }) : super(key: key);
 
   @override
+  _InfoTileState createState() => _InfoTileState();
+}
+
+class _InfoTileState extends State<InfoTile> {
+  @override
   Widget build(BuildContext context) {
-    // Cắt chuỗi thông tin để chỉ hiển thị một dòng
-    String shortInformation = information.split('\n').first;
+    String shortInformation = widget.information.split('\n').first;
 
     return Card(
       child: ListTile(
         leading: SizedBox(
-          width: 100, // Đặt chiều rộng cố định cho hình ảnh
-          height: 100, // Đặt chiều cao cố định cho hình ảnh
+          width: 100,
+          height: 100,
           child: Image.network(
-            imageURL,
-            fit: BoxFit.cover, // Để ảnh scale để vừa với kích thước khung
+            widget.imageURL,
+            fit: BoxFit.cover,
           ),
-        ), // Hiển thị ảnh bên trái
+        ),
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              name,
-              style: TextStyle(fontWeight: FontWeight.bold),
+            Row(
+              children: [
+                _AvatarWithName(
+                  name: widget.name,
+                  userId: widget.userId,
+                ),
+              ],
             ),
             Text(
-              title,
-              style: TextStyle(fontWeight: FontWeight.bold),
+              widget.timestamp,
+              style: TextStyle(fontSize: 10, color: Colors.grey),
             ),
             Text(
-              shortInformation,
-              style: TextStyle(color: Colors.blue),
-              maxLines: 1, // Chỉ hiển thị một dòng
-              overflow: TextOverflow
-                  .ellipsis, // Hiển thị dấu chấm cuối dòng nếu vượt quá
+              widget.title,
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
+            _ShortInfo(shortInformation: shortInformation),
           ],
         ),
         onTap: () {
@@ -139,15 +192,105 @@ class InfoTile extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => DetailScreen(
-                name: name,
-                title: title,
-                imageURL: imageURL,
-                information: information,
+                name: widget.name,
+                title: widget.title,
+                imageURL: widget.imageURL,
+                information: widget.information,
               ),
             ),
           );
         },
       ),
+    );
+  }
+}
+
+class _AvatarWithName extends StatelessWidget {
+  final String name;
+  final String userId;
+
+  const _AvatarWithName({
+    Key? key,
+    required this.name,
+    required this.userId,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<DocumentSnapshot>(
+      future: FirebaseFirestore.instance.collection('users').doc(userId).get(),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Row(
+            children: [
+              CircleAvatar(
+                radius: 15,
+                backgroundColor: Colors.grey,
+              ),
+              SizedBox(width: 8),
+              Text(
+                name,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ],
+          );
+        }
+        if (snapshot.hasError) {
+          return Row(
+            children: [
+              CircleAvatar(
+                radius: 15,
+                backgroundColor: Colors.red,
+              ),
+              SizedBox(width: 8),
+              Text(
+                name,
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ],
+          );
+        }
+
+        var userDocument = snapshot.data;
+        var profileImageUrl = userDocument?['profile_url'] ?? '';
+
+        return Row(
+          children: [
+            CircleAvatar(
+              radius: 15,
+              backgroundImage: profileImageUrl.isNotEmpty
+                  ? NetworkImage(profileImageUrl)
+                  : null,
+              backgroundColor:
+                  profileImageUrl.isEmpty ? Colors.grey : Colors.transparent,
+            ),
+            SizedBox(width: 8),
+            Text(
+              name,
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class _ShortInfo extends StatelessWidget {
+  final String shortInformation;
+
+  const _ShortInfo({
+    Key? key,
+    required this.shortInformation,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(
+      shortInformation,
+      style: TextStyle(color: Colors.blue, fontSize: 15),
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
     );
   }
 }

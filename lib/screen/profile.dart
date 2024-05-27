@@ -18,7 +18,7 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
-  late bool _status;
+  late bool _status, _isEditing = false;
   final FocusNode myFocusNode = FocusNode();
   File? _image;
   String? _userId;
@@ -28,8 +28,6 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _phoneController = TextEditingController();
-  TextEditingController _jobController = TextEditingController();
-  TextEditingController _experienceController = TextEditingController();
 
   @override
   void initState() {
@@ -58,7 +56,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
           .get();
       if (userData.exists) {
         // Lấy đường dẫn hình ảnh từ DocumentSnapshot
-        String? imageUrl = userData['image_url'];
+        String? imageUrl = userData['profile_url'];
 
         // Kiểm tra xem đường dẫn hình ảnh có tồn tại không
         if (imageUrl != null && imageUrl.isNotEmpty) {
@@ -72,8 +70,6 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
           _nameController.text = userData['name'] ?? '';
           _emailController.text = userData['email'] ?? '';
           _phoneController.text = userData['phone'] ?? '';
-          _jobController.text = userData['job'] ?? '';
-          _experienceController.text = userData['experience'] ?? '';
         });
       }
     }
@@ -99,12 +95,24 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
         });
       } else {
         // Xử lý khi không tải được hình ảnh
-        print('Không ti được ảnh: ${response.statusCode}');
+        print('Không tải được ảnh: ${response.statusCode}');
       }
     } catch (e) {
       // Xử lý khi có lỗi xảy ra
       print('Lỗi khi tải ảnh: $e');
     }
+  }
+
+  Future<void> _clearUserData() async {
+    // Clear image from local cache
+    setState(() {
+      _image = null;
+    });
+
+    // Optionally clear other cached user data here, if you use SharedPreferences or any other local storage
+
+    // Clear Firestore cache
+    FirebaseFirestore.instance.clearPersistence();
   }
 
   Future getImage() async {
@@ -187,27 +195,28 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                                 backgroundColor: Colors.transparent,
                                 backgroundImage: _image != null
                                     ? FileImage(_image!)
-                                    : AssetImage('images/profile-user.png')
+                                    : AssetImage('images/profile.png')
                                         as ImageProvider,
                               ),
                             ),
-                            Positioned(
-                              bottom: 0,
-                              right: 40,
-                              child: GestureDetector(
-                                onTap: () {
-                                  getImage();
-                                },
-                                child: CircleAvatar(
-                                  backgroundColor: Colors.red,
-                                  radius: 25.0,
-                                  child: Icon(
-                                    Icons.camera_alt,
-                                    color: Colors.white,
+                            if (_isEditing)
+                              Positioned(
+                                bottom: 0,
+                                right: 40,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    getImage();
+                                  },
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.red,
+                                    radius: 25.0,
+                                    child: Icon(
+                                      Icons.camera_alt,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
                           ],
                         ),
                       )
@@ -289,6 +298,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                                   ),
                                   enabled: !_status,
                                   autofocus: !_status,
+                                  maxLength: 20,
                                 ),
                               ),
                             ],
@@ -329,6 +339,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                                     hintText: "Nhập Email của bạn",
                                   ),
                                   enabled: !_status,
+                                  maxLength: 25,
                                 ),
                               ),
                             ],
@@ -369,21 +380,47 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                                     hintText: "Nhập số điện thoại",
                                   ),
                                   enabled: !_status,
+                                  maxLength: 15,
                                 ),
                               ),
                             ],
                           ),
                         ),
+                        !_status ? _getActionButtons() : Container(),
                         Padding(
-                          padding: const EdgeInsets.all(16.0),
+                          padding: const EdgeInsets.fromLTRB(130.0, 15.0, 130.0,
+                              0), // Giảm khoảng cách từ trên xuống và từ trái qua
+
                           child: ElevatedButton(
                             onPressed: () {
                               _showLogoutConfirmationDialog(context);
                             },
-                            child: Text('Đăng xuất'),
+                            style: ButtonStyle(
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.red), // Đặt màu sắc nút thành đỏ
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      20.0), // Đặt viền cong cho nút
+                                ),
+                              ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment
+                                  .center, // Đưa biểu tượng và văn bản vào giữa theo chiều ngang
+                              children: [
+                                Icon(Icons.logout,
+                                    color: Colors.white), // Thêm biểu tượng
+                                SizedBox(
+                                    width:
+                                        8), // Khoảng cách giữa biểu tượng và văn bản
+                                Text('Đăng xuất',
+                                    style: TextStyle(color: Colors.white)),
+                              ],
+                            ),
                           ),
                         ),
-                        !_status ? _getActionButtons() : Container(),
                       ],
                     ),
                   ),
@@ -465,7 +502,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
   Widget _getEditIcon() {
     return GestureDetector(
       child: CircleAvatar(
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.lightBlueAccent,
         radius: 14.0,
         child: Icon(
           Icons.edit,
@@ -476,9 +513,23 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
       onTap: () {
         setState(() {
           _status = false;
+          // Đặt _isEditing thành true khi chỉnh sửa được kích hoạt
+          _isEditing = true;
         });
       },
     );
+  }
+
+  Future<void> _logOut() async {
+    // Clear user data
+    await _clearUserData();
+
+    // Log out from Firebase
+    await FirebaseAuth.instance.signOut();
+
+    // Navigate to Login page
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => LogIn()));
   }
 
   Future<void> _showLogoutConfirmationDialog(BuildContext context) async {
@@ -486,21 +537,27 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Are you sure?'),
-          content: Text('Do you want to logout?'),
+          backgroundColor: Colors.white,
+          title: Text('Bạn chắc chứ?',
+              style: TextStyle(
+                color: Colors.blue,
+              )),
+          content: Text('Bạn có muốn đăng xuất không?',
+              style: TextStyle(color: Colors.blue)),
           actions: <Widget>[
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Back'),
+              child: Text('Quay lại', style: TextStyle(color: Colors.blue)),
             ),
             TextButton(
-              onPressed: () {
-                Navigator.push(
-                    context, MaterialPageRoute(builder: (context) => LogIn()));
+              onPressed: () async {
+                await _logOut();
               },
-              child: Text('Ok'),
+              child: Text('OK',
+                  style: TextStyle(
+                      color: Colors.red, fontWeight: FontWeight.bold)),
             ),
           ],
         );
@@ -514,7 +571,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
     String email = _emailController.text;
     String phone = _phoneController.text;
 
-    // Thực hiện tải hình ảnh lên Firebase Storage (ví dụ)
+    // Thực hiện tải hình ảnh lên Firebase Storage (nếu có)
     String? imageUrl;
     if (_image != null) {
       imageUrl = await _uploadImageToFirebaseStorage(_image!);
@@ -522,17 +579,19 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
 
     // Thực hiện lưu vào Firestore
     if (_userId != null) {
+      // Chỉ cập nhật đường dẫn của hình ảnh mới
       FirebaseFirestore.instance.collection('users').doc(_userId).set({
         'name': name,
         'email': email,
         'phone': phone,
-        'image_url': imageUrl,
+        'profile_url': imageUrl, // Lưu đường dẫn của ảnh mới
       }, SetOptions(merge: true));
     }
 
     // Sau khi lưu, cập nhật trạng thái về readOnly
     setState(() {
       _status = true;
+      _isEditing = false;
     });
   }
 
@@ -555,5 +614,11 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
       print('Error uploading image to Firebase Storage: $e');
       return null;
     }
+  }
+
+  @override
+  void dispose() {
+    myFocusNode.dispose();
+    super.dispose();
   }
 }

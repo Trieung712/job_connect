@@ -12,7 +12,7 @@ class CreateCV extends StatelessWidget {
           // Ảnh nền
           Positioned.fill(
             child: Image.asset(
-              'images/sp_back.jpg', // Đường dẫn đến ảnh của bạn
+              'images/back_test.jpg', // Đường dẫn đến ảnh của bạn
               fit: BoxFit.cover, // Đảm bảo ảnh nền bao phủ toàn bộ màn hình
             ),
           ),
