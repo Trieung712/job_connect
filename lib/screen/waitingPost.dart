@@ -43,7 +43,7 @@ class _WaitingPostState extends State<WaitingPost> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Thông tin chờ duyệt'),
+          title: Text('Bài đăng chờ duyệt'),
           automaticallyImplyLeading:
               false, // Đặt giá trị này thành false để loại bỏ icon back
         ),
