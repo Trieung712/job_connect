@@ -56,6 +56,16 @@ class _AddScreenState extends State<AddScreen> {
     });
   }
 
+  String getCollectionName(String userRole) {
+    return (userRole == '0') ? 'post_from_hr' : 'waiting_posts';
+  }
+
+// Hàm để đưa dữ liệu vào collection tương ứng
+  Future<void> addToCollection(
+      String collectionName, Map<String, dynamic> data) async {
+    await FirebaseFirestore.instance.collection(collectionName).add(data);
+  }
+
   Future<void> _submitData() async {
     final enteredTitle = _titleController.text;
     final enteredInformation = _informationController.text;
@@ -64,7 +74,8 @@ class _AddScreenState extends State<AddScreen> {
         enteredInformation.isEmpty ||
         _image == null ||
         _userName.isEmpty ||
-        _userId.isEmpty) {
+        _userId.isEmpty ||
+        _userRole.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Vui lòng nhập đầy đủ các mục')),
       );
@@ -82,19 +93,30 @@ class _AddScreenState extends State<AddScreen> {
     String formattedTime =
         DateFormat('HH:mm:ss dd/MM/yyyy').format(currentTime);
 
-    await FirebaseFirestore.instance.collection('waiting_posts').add({
+    // Kiểm tra vai trò của người dùng để đưa dữ liệu vào collection tương ứng
+    String collectionName = getCollectionName(_userRole);
+    Map<String, dynamic> postData = {
       'userId': _userId,
       'name': _userName,
       'title': enteredTitle,
       'information': enteredInformation,
       'imageURL': imageURL,
+      // Lưu URL hồ sơ của người dùng
       'timestamp': formattedTime,
       'dateTime': currentTime,
-    });
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Đã gửi cho Quản trị viên phê duyệt. ')),
-    );
+    };
+    if (_userRole == '0') {
+      await addToCollection(collectionName, postData);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Đăng bài thành công.')),
+      );
+    } else {
+      // Nếu vai trò không phải 0, đưa dữ liệu lên collection tương ứng và hiện thông báo mặc định
+      await addToCollection(collectionName, postData);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Đã gửi cho Quản trị viên phê duyệt. ')),
+      );
+    }
 
     _titleController.clear();
     _informationController.clear();
