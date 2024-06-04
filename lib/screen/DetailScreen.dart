@@ -47,7 +47,7 @@ class DetailScreen extends StatelessWidget {
                     name,
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        fontSize: 25.0,
+                        fontSize: 35.0,
                         color: Colors.blue),
                   ),
                   SizedBox(height: 8.0),
@@ -57,7 +57,7 @@ class DetailScreen extends StatelessWidget {
                         TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0),
                   ),
                   SizedBox(height: 8.0),
-                  buildInformationText(information),
+                  SelectableText(information, style: TextStyle(fontSize: 22.0)),
                   SizedBox(height: 8.0),
                   GestureDetector(
                     onTap: () {
