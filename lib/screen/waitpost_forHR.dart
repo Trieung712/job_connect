@@ -1,55 +1,54 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'DetailForAdmin.dart';
 
-class WaitingPost extends StatefulWidget {
-  const WaitingPost({Key? key});
+import 'DetailforHR.dart';
+
+class WaitingPostHR extends StatefulWidget {
+  const WaitingPostHR({Key? key});
 
   @override
-  State<WaitingPost> createState() => _WaitingPostState();
+  State<WaitingPostHR> createState() => _WaitingPostHRState();
 }
 
-class _WaitingPostState extends State<WaitingPost> {
+class _WaitingPostHRState extends State<WaitingPostHR> {
   bool _isBackPressed = false;
 
   @override
   Widget build(BuildContext context) {
+    final currentUser = FirebaseAuth.instance.currentUser;
+
     return WillPopScope(
-      // Chặn nút back
       onWillPop: () async {
         if (_isBackPressed) {
-          // Nếu nhấn nút back hai lần, thực hiện hành động như nút home
           SystemNavigator.pop();
-          return true; // Thoát ứng dụng
+          return true;
         } else {
-          // Nhấn lần đầu, đặt _isBackPressed thành true
           _isBackPressed = true;
-          // Hiển thị toast báo nhấn lại lần nữa để thoát
           Fluttertoast.showToast(
             msg: "Nhấn back lần nữa để thoát ứng dụng",
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.BOTTOM,
           );
-          // Đặt lại _isBackPressed sau một khoảng thời gian (2 giây trong trường hợp này)
           Future.delayed(Duration(seconds: 2), () {
             setState(() {
               _isBackPressed = false;
             });
           });
-          return false; // Không thoát ứng dụng
+          return false;
         }
       },
       child: Scaffold(
         appBar: AppBar(
           title: Text('Bài đăng chờ duyệt'),
-          automaticallyImplyLeading:
-              false, // Đặt giá trị này thành false để loại bỏ icon back
+          automaticallyImplyLeading: false,
         ),
         body: StreamBuilder(
           stream: FirebaseFirestore.instance
               .collection('waiting_posts')
+              .where('userId', isEqualTo: currentUser?.uid)
               .orderBy('dateTime', descending: false)
               .snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -59,6 +58,13 @@ class _WaitingPostState extends State<WaitingPost> {
               );
             }
             if (snapshot.hasError) {
+              if (snapshot.error.toString().contains('index')) {
+                return Center(
+                  child: Text(
+                    'The required index is being built. Please try again later.',
+                  ),
+                );
+              }
               return Center(
                 child: Text('Error: ${snapshot.error}'),
               );
@@ -70,8 +76,8 @@ class _WaitingPostState extends State<WaitingPost> {
                 var information = document['information'];
                 var imageURL = document['imageURL'];
                 var timestamp = document['timestamp'];
-                var postId = document.id; // Lấy postId từ document ID
-                var userId = document['userId']; // Lấy userId từ document
+                var postId = document.id;
+                var userId = document['userId'];
 
                 return InfoTile(
                   name: name,
@@ -144,15 +150,36 @@ class InfoTile extends StatelessWidget {
             _ShortInfo(shortInformation: shortInformation),
           ],
         ),
+        trailing: IconButton(
+          icon: Icon(Icons.edit), // Thay đổi biểu tượng nếu cần thiết
+          onPressed: () {
+            // Xử lý sự kiện khi nút được nhấn
+            // Ví dụ: Mở màn hình sửa đổi thông tin
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DetailHRScreen(
+                  name: name,
+                  title: title,
+                  imageURL: imageURL,
+                  information: information,
+                  userId: userId,
+                  postId: postId,
+                ),
+              ),
+            );
+          },
+        ),
         onTap: () {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => DetailForAdminScreen(
+              builder: (context) => DetailHRScreen(
                 name: name,
                 title: title,
                 imageURL: imageURL,
                 information: information,
+                userId: userId,
                 postId: postId,
               ),
             ),

@@ -11,6 +11,19 @@ class Home extends StatefulWidget {
   State<Home> createState() => _HomeState();
 }
 
+DateTime timestampToDateTime(String timestamp) {
+  List<String> parts = timestamp.split(' ');
+  List<String> timeParts = parts[0].split(':');
+  List<String> dateParts = parts[1].split('/');
+  int hour = int.parse(timeParts[0]);
+  int minute = int.parse(timeParts[1]);
+  int second = int.parse(timeParts[2]);
+  int day = int.parse(dateParts[0]);
+  int month = int.parse(dateParts[1]);
+  int year = int.parse(dateParts[2]);
+  return DateTime(year, month, day, hour, minute, second);
+}
+
 class _HomeState extends State<Home> {
   bool _isBackPressed = false;
   int _perPage = 10;
@@ -54,7 +67,7 @@ class _HomeState extends State<Home> {
         body: StreamBuilder(
           stream: FirebaseFirestore.instance
               .collection('post_from_hr')
-              .orderBy('timestamp', descending: true)
+              .orderBy('dateTime', descending: true)
               .limit(_perPage * _currentPage)
               .snapshots(),
           builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {

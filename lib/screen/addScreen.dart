@@ -22,7 +22,7 @@ class _AddScreenState extends State<AddScreen> {
   final picker = ImagePicker();
   late String _userName;
   late String _userId;
-
+  late String _userRole;
   @override
   void initState() {
     super.initState();
@@ -39,6 +39,7 @@ class _AddScreenState extends State<AddScreen> {
       setState(() {
         _userName = userDoc['name'];
         _userId = user.uid;
+        _userRole = userDoc['role'];
       });
     }
   }
@@ -80,14 +81,15 @@ class _AddScreenState extends State<AddScreen> {
     DateTime currentTime = DateTime.now();
     String formattedTime =
         DateFormat('HH:mm:ss dd/MM/yyyy').format(currentTime);
+
     await FirebaseFirestore.instance.collection('waiting_posts').add({
       'userId': _userId,
       'name': _userName,
       'title': enteredTitle,
       'information': enteredInformation,
       'imageURL': imageURL,
-      // Lưu URL hồ sơ của người dùng
       'timestamp': formattedTime,
+      'dateTime': currentTime,
     });
 
     ScaffoldMessenger.of(context).showSnackBar(

@@ -6,8 +6,6 @@ import 'package:my_app/log/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import '../sharedPreferences.dart';
-
 class LogIn extends StatefulWidget {
   const LogIn({super.key});
 
@@ -27,8 +25,7 @@ class _LogInState extends State<LogIn> {
     try {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
-      await SharedPreferencesManager.saveLoginStatus(
-          email); // Lưu trạng thái đăng nhập
+      // Lưu trạng thái đăng nhập
 
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => NavigationMenu()));

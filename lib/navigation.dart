@@ -7,6 +7,7 @@ import 'package:my_app/screen/createCV.dart';
 import 'package:my_app/screen/profile.dart';
 import 'package:my_app/screen/waitingPost.dart';
 import 'package:my_app/screen/notification.dart';
+import 'package:my_app/screen/waitpost_forHR.dart';
 
 class NavigationMenu extends StatefulWidget {
   const NavigationMenu({Key? key}) : super(key: key);
@@ -114,7 +115,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
       return <Widget>[
         Home(),
         AddScreen(),
-        CreateCV(),
+        WaitingPostHR(),
         NotiScreen(),
         Profile(),
       ];
@@ -129,7 +130,6 @@ class _NavigationMenuState extends State<NavigationMenu> {
         Home(),
         AddScreen(),
         WaitingPost(),
-        CreateCV(),
         Profile(),
       ];
     }
@@ -147,8 +147,8 @@ class _NavigationMenuState extends State<NavigationMenu> {
           label: 'Đăng bài',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.create),
-          label: 'Tạo CV',
+          icon: Icon(Icons.drive_folder_upload_outlined),
+          label: 'Thông báo',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.notifications),
@@ -187,10 +187,6 @@ class _NavigationMenuState extends State<NavigationMenu> {
         BottomNavigationBarItem(
           icon: Icon(Icons.drive_folder_upload),
           label: 'WaitPost',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.create),
-          label: 'Tạo CV',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person),

@@ -50,8 +50,10 @@ class DetailForAdminScreen extends StatelessWidget {
                 children: [
                   SelectableText(
                     name,
-                    style:
-                        TextStyle(fontWeight: FontWeight.bold, fontSize: 25.0),
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 25.0,
+                        color: Colors.blue),
                   ),
                   SizedBox(height: 8.0),
                   SelectableText(
