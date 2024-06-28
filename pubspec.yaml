@@ -73,11 +73,16 @@ dependencies:
   shared_preferences: ^2.2.3
   flutter_xlider: ^3.5.0
   cloud_firestore: ^4.17.3
-  screenshot: ^2.5.0
+
   firebase_messaging: ^14.9.4
   flutter_local_notifications: ^17.1.2
   firebase_analytics: ^10.10.7
   firebase_app_check: ^0.2.2+7
+  screenshot: ^3.0.0
+  onesignal_flutter: ^5.2.0
+  googleapis: ^13.1.0
+  google_auth: ^0.0.3
+  googleapis_auth: ^1.6.0
 
 
 

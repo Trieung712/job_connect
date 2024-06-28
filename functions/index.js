@@ -1,20 +1,40 @@
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
-admin.initializeApp();
+const serviceAccount = require("./serviceAccount.json");
+admin.initializeApp({credential: admin.credential.cert(serviceAccount)});
 
 exports.sendNotificationOnNewPost = functions.firestore
     .document("post_from_hr/{postId}")
-    .onCreate((snapshot, context) => {
-      const newData = snapshot.data();
-      const title = newData.title; // Lấy tiêu đề của bài viết mới
-      const message = newData.message; // Lấy nội dung của bài viết mới
+    .onCreate(async (snap, context) => {
+      const newValue = snap.data();
+      const usersRef = admin.firestore().collection("users");
+      const querySnapshot = await usersRef.where("role", "==", "2").get();
 
-      // Gửi thông báo tới tất cả các thiết bị đăng ký trên chủ đề "new_post"
-      return admin.messaging().sendToTopic("new_post", {
-        notification: {
-          title: title,
-          body: message,
-          clickAction: "FLUTTER_NOTIFICATION_CLICK",
-        },
+      const tokens = [];
+      querySnapshot.forEach((doc) => {
+        const token = doc.data().fcmToken;
+        if (token) {
+          tokens.push(token);
+        }
       });
+
+      const payload = {
+        notification: {
+          title: "New Post from HR",
+          body: newValue.title,
+        },
+      };
+
+
+      if (tokens.length > 0) {
+        try {
+          const response = await admin.messaging().sendToDevice(tokens,
+              payload);
+          console.log("Notification sent successfully:", response);
+        } catch (error) {
+          console.error("Error sending notification:", error);
+        }
+      } else {
+        console.log("No tokens found.");
+      }
     });
