@@ -133,6 +133,7 @@ class _AddScreenState extends State<AddScreen> {
         return true;
       },
       child: Scaffold(
+        backgroundColor: Colors.white,
         appBar: AppBar(
           title: Text('Tạo bài đăng mới'),
           automaticallyImplyLeading: false,

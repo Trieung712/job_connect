@@ -42,7 +42,7 @@ class _SignUpState extends State<SignUp> {
         });
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
-          "Registered Successfully",
+          "Đăng kí thành công!",
           style: TextStyle(fontSize: 20.0),
         )));
         // ignore: use_build_context_synchronously
@@ -53,14 +53,14 @@ class _SignUpState extends State<SignUp> {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               backgroundColor: Colors.orangeAccent,
               content: Text(
-                "Password Provided is too Weak",
+                "Mật khẩu quá yếu",
                 style: TextStyle(fontSize: 18.0),
               )));
         } else if (e.code == "email-already-in-use") {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               backgroundColor: Colors.orangeAccent,
               content: Text(
-                "Account Already exists",
+                "E-mail đã được sử dụng",
                 style: TextStyle(fontSize: 18.0),
               )));
         }
@@ -96,14 +96,14 @@ class _SignUpState extends State<SignUp> {
                     TextFormField(
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please Enter Name';
+                          return 'Nhập tên của bạn';
                         }
                         return null;
                       },
                       controller: namecontroller,
                       maxLength: 20,
                       decoration: InputDecoration(
-                        labelText: "Name",
+                        labelText: "Họ tên",
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30.0),
                         ),
@@ -123,7 +123,7 @@ class _SignUpState extends State<SignUp> {
                           borderRadius: BorderRadius.circular(30.0),
                         ),
                       ),
-                      items: ["HR", "Student"]
+                      items: ["HR", "Sinh viên"]
                           .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
@@ -135,7 +135,7 @@ class _SignUpState extends State<SignUp> {
                     TextFormField(
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please Enter Email';
+                          return 'Hãy nhập Email';
                         }
                         return null;
                       },
@@ -152,13 +152,13 @@ class _SignUpState extends State<SignUp> {
                     TextFormField(
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please Enter Password';
+                          return 'Hãy nhập mật khẩu';
                         }
                         return null;
                       },
                       controller: passwordcontroller,
                       decoration: InputDecoration(
-                        labelText: "Password",
+                        labelText: "Mật khẩu",
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30.0),
                         ),
@@ -186,7 +186,7 @@ class _SignUpState extends State<SignUp> {
                               borderRadius: BorderRadius.circular(30)),
                           child: Center(
                               child: Text(
-                            "Sign Up",
+                            "Đăng kí",
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 22.0,
@@ -197,40 +197,11 @@ class _SignUpState extends State<SignUp> {
                 ),
               ),
               SizedBox(height: 40.0),
-              Text(
-                "or LogIn with",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Color(0xFF273671),
-                  fontSize: 22.0,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              SizedBox(height: 30.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Image.asset(
-                    "images/google.png",
-                    height: 45,
-                    width: 45,
-                    fit: BoxFit.cover,
-                  ),
-                  SizedBox(width: 30.0),
-                  Image.asset(
-                    "images/apple1.png",
-                    height: 50,
-                    width: 50,
-                    fit: BoxFit.cover,
-                  )
-                ],
-              ),
-              SizedBox(height: 40.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Already have an account?",
+                    "Đã có tài khoản?",
                     style: TextStyle(
                       color: Color(0xFF8c8e98),
                       fontSize: 18.0,
@@ -244,7 +215,7 @@ class _SignUpState extends State<SignUp> {
                           MaterialPageRoute(builder: (context) => LogIn()));
                     },
                     child: Text(
-                      "LogIn",
+                      "Đăng nhập ngay",
                       style: TextStyle(
                         color: Color(0xFF273671),
                         fontSize: 20.0,

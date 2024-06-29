@@ -60,18 +60,12 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('User Info'),
+        title: Text('Thông tin người dùng'),
       ),
       body: Stack(
         children: [
-          // Ảnh nền
-          Positioned.fill(
-            child: Image.asset(
-              'images/back_test.jpg', // Đường dẫn đến ảnh nền của bạn
-              fit: BoxFit.cover,
-            ),
-          ),
           SingleChildScrollView(
             child: Padding(
               padding: EdgeInsets.all(16.0),
@@ -480,7 +474,8 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                     onPressed: () async {
                       try {
                         String prompt =
-                            'I am a "$profession" with "$experience" experience working at "$organization". Help me create a brief sentence for employers to hire me. Description should not exceed 25 words';
+                            ' Tôi là một "$profession" với "$experience" kinh nghiệm làm việc tại "$organization". '
+                            'Hãy giúp tôi tạo một câu ngắn gọn bằng tiếng Việt để các nhà tuyển dụng tuyển tôi. Mô tả không vượt quá 25 từ.';
                         String? generatedDescription =
                             await generateDescription(prompt);
 
@@ -495,7 +490,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                             TextEditingController descriptionController =
                                 TextEditingController(text: tempDescription);
                             return AlertDialog(
-                              title: Text('Tạo mô tả'),
+                              title: Text('Tạo mô tả bằng AI'),
                               content: SingleChildScrollView(
                                 child: Column(
                                   mainAxisSize: MainAxisSize.min,
@@ -555,7 +550,7 @@ class _UserInfoScreenState extends State<UserInfoScreen> {
                         );
                       }
                     },
-                    child: Text('Tạo mô tả'),
+                    child: Text('Tạo mô tả bằng AI'),
                   ),
                   SizedBox(height: 20),
                   ElevatedButton(

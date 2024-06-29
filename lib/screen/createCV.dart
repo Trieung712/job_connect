@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'InputScreen.dart';
+import 'InputScreen_CV.dart';
 
 class CreateCV extends StatelessWidget {
   const CreateCV({Key? key}) : super(key: key);
@@ -7,15 +7,11 @@ class CreateCV extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
           // Ảnh nền
-          Positioned.fill(
-            child: Image.asset(
-              'images/back_test.jpg', // Đường dẫn đến ảnh của bạn
-              fit: BoxFit.cover, // Đảm bảo ảnh nền bao phủ toàn bộ màn hình
-            ),
-          ),
+
           Center(
             child: Padding(
               padding: const EdgeInsets.all(20.0),

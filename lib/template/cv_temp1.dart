@@ -184,8 +184,8 @@ class CVTemplate extends StatelessWidget {
                       txt: "Education",
                     ),
                     FullEdu(
-                      txt1: university,
-                      txt2: university,
+                      txt1: organization,
+                      txt2: organization,
                     ),
                     SecTitleTxt(
                       txt: "Experience",

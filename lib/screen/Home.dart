@@ -64,6 +64,7 @@ class _HomeState extends State<Home> {
           automaticallyImplyLeading:
               false, // Đặt giá trị này thành false để loại bỏ icon back
         ),
+        backgroundColor: Colors.white,
         body: StreamBuilder(
           stream: FirebaseFirestore.instance
               .collection('post_from_hr')
@@ -169,6 +170,7 @@ class _InfoTileState extends State<InfoTile> {
     String shortInformation = widget.information.split('\n').first;
 
     return Card(
+      color: Colors.white,
       child: ListTile(
         leading: SizedBox(
           width: 100,

@@ -47,6 +47,7 @@ class _WaitingPostState extends State<WaitingPost> {
           automaticallyImplyLeading:
               false, // Đặt giá trị này thành false để loại bỏ icon back
         ),
+        backgroundColor: Colors.white,
         body: StreamBuilder(
           stream: FirebaseFirestore.instance
               .collection('waiting_posts')
@@ -116,6 +117,7 @@ class InfoTile extends StatelessWidget {
     String shortInformation = information.split('\n').first;
 
     return Card(
+      color: Colors.white,
       child: ListTile(
         leading: SizedBox(
           width: 100,

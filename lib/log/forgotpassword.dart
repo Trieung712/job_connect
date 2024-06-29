@@ -20,14 +20,14 @@ class _ForgotPasswordState extends State<ForgotPassword> {
       await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content: Text(
-        "Password Reset Email has been sent !",
+        "Email thay đổi mật khẩu đã được gủi !",
         style: TextStyle(fontSize: 20.0),
       )));
     } on FirebaseAuthException catch (e) {
       if (e.code == "user-not-found") {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
-          "No user found for that email.",
+          "Không tìm thấy Email.",
           style: TextStyle(fontSize: 20.0),
         )));
       }
@@ -47,7 +47,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
             Container(
               alignment: Alignment.topCenter,
               child: Text(
-                "Password Recovery",
+                "Khôi phục mật khẩu",
                 style: TextStyle(
                     color: Colors.white,
                     fontSize: 30.0,
@@ -58,7 +58,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
               height: 10.0,
             ),
             Text(
-              "Enter your mail",
+              "Nhập Email của bạn",
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 20.0,
@@ -81,7 +81,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             child: TextFormField(
                               validator: (value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please Enter Email';
+                                  return 'Hãy nhập Email của bạn';
                                 }
                                 return null;
                               },
@@ -119,7 +119,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                   borderRadius: BorderRadius.circular(10)),
                               child: Center(
                                 child: Text(
-                                  "Send Email",
+                                  "Gửi Email",
                                   style: TextStyle(
                                       color: Colors.black,
                                       fontSize: 18.0,
@@ -135,7 +135,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                "Don't have an account?",
+                                "Chưa có tài khoản?",
                                 style: TextStyle(
                                     fontSize: 18.0, color: Colors.white),
                               ),
@@ -150,7 +150,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                                           builder: (context) => SignUp()));
                                 },
                                 child: Text(
-                                  "Create",
+                                  "Đăng kí ngay",
                                   style: TextStyle(
                                       color: Color.fromARGB(225, 184, 166, 6),
                                       fontSize: 20.0,

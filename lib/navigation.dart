@@ -19,10 +19,8 @@ class NavigationMenu extends StatefulWidget {
 class _NavigationMenuState extends State<NavigationMenu> {
   late int _selectedIndex;
   late int userRole;
-  bool _isLoading =
-      true; // Biến để xác định xem dữ liệu đang được tải hay không
-  bool _errorLoading =
-      false; // Biến để xác định xem có lỗi xảy ra khi tải dữ liệu hay không
+  bool _isLoading = true;
+  bool _errorLoading = false;
 
   @override
   void initState() {
@@ -105,6 +103,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.blue,
         unselectedItemColor: Colors.black,
+        backgroundColor: Colors.white,
         onTap: _onItemTapped,
       ),
     );
@@ -148,7 +147,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.drive_folder_upload_outlined),
-          label: 'Thông báo',
+          label: 'Bài đăng chờ duyệt',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.notifications),
@@ -186,7 +185,7 @@ class _NavigationMenuState extends State<NavigationMenu> {
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.drive_folder_upload),
-          label: 'WaitPost',
+          label: 'Bài đăng chờ duyệt',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person),

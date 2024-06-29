@@ -45,6 +45,7 @@ class _WaitingPostHRState extends State<WaitingPostHR> {
           title: Text('Bài đăng chờ duyệt'),
           automaticallyImplyLeading: false,
         ),
+        backgroundColor: Colors.white,
         body: StreamBuilder(
           stream: FirebaseFirestore.instance
               .collection('waiting_posts')
@@ -122,6 +123,7 @@ class InfoTile extends StatelessWidget {
     String shortInformation = information.split('\n').first;
 
     return Card(
+      color: Colors.white,
       child: ListTile(
         leading: SizedBox(
           width: 100,

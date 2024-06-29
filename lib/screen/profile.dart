@@ -155,6 +155,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
         }
       },
       child: Scaffold(
+        backgroundColor: Colors.white,
         body: ListView(
           children: <Widget>[
             Column(
@@ -478,7 +479,7 @@ class _ProfileState extends State<Profile> with SingleTickerProviderStateMixin {
                     });
                   },
                   child: Text(
-                    "Cancel",
+                    "Hủy",
                     style: TextStyle(color: Colors.white),
                   ),
                   style: ButtonStyle(

@@ -76,7 +76,7 @@ class _LogInState extends State<LogIn> {
                     TextFormField(
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please Enter E-mail';
+                          return 'Hãy nhập E-mail của bạn';
                         }
                         return null;
                       },
@@ -93,12 +93,12 @@ class _LogInState extends State<LogIn> {
                       controller: passwordcontroller,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Please Enter Password';
+                          return 'Hãy nhập mật khẩu';
                         }
                         return null;
                       },
                       decoration: InputDecoration(
-                        labelText: "Password",
+                        labelText: "Mật khẩu",
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(30.0),
                         ),
@@ -125,7 +125,7 @@ class _LogInState extends State<LogIn> {
                               borderRadius: BorderRadius.circular(30)),
                           child: Center(
                               child: Text(
-                            "Sign In",
+                            "Đăng nhập",
                             style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 22.0,
@@ -144,7 +144,7 @@ class _LogInState extends State<LogIn> {
                           builder: (context) => ForgotPassword()));
                 },
                 child: Text(
-                  "Forgot Password?",
+                  "Quên mật khẩu?",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Color(0xFF8c8e98),
@@ -154,50 +154,12 @@ class _LogInState extends State<LogIn> {
                 ),
               ),
               SizedBox(height: 20.0),
-              Text(
-                "or LogIn with",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Color(0xFF273671),
-                  fontSize: 22.0,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              SizedBox(height: 20.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      AuthMethods().signInWithGoogle(context);
-                    },
-                    child: Image.asset(
-                      "images/google.png",
-                      height: 45,
-                      width: 45,
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                  SizedBox(width: 30.0),
-                  GestureDetector(
-                    onTap: () {
-                      AuthMethods().signInWithApple();
-                    },
-                    child: Image.asset(
-                      "images/apple1.png",
-                      height: 50,
-                      width: 50,
-                      fit: BoxFit.cover,
-                    ),
-                  )
-                ],
-              ),
               SizedBox(height: 20.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Don't have an account?",
+                    "Chưa có tài khoản?",
                     style: TextStyle(
                       color: Color(0xFF8c8e98),
                       fontSize: 18.0,
@@ -211,7 +173,7 @@ class _LogInState extends State<LogIn> {
                           MaterialPageRoute(builder: (context) => SignUp()));
                     },
                     child: Text(
-                      "Sign Up",
+                      "Đăng kí ngay",
                       style: TextStyle(
                         color: Color(0xFF273671),
                         fontSize: 20.0,

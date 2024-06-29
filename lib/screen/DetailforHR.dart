@@ -133,6 +133,7 @@ class _DetailHRScreenState extends State<DetailHRScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
         title: Text('Chỉnh sửa bài đăng'),
         actions: [
@@ -197,14 +198,14 @@ class _DetailHRScreenState extends State<DetailHRScreen> {
                 SizedBox(height: 8.0),
                 TextFormField(
                   controller: _titleController,
-                  decoration: InputDecoration(labelText: 'Title'),
+                  decoration: InputDecoration(labelText: 'Tiêu đề'),
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0),
                 ),
                 SizedBox(height: 8.0),
                 TextFormField(
                   controller: _informationController,
                   maxLines: null,
-                  decoration: InputDecoration(labelText: 'Information'),
+                  decoration: InputDecoration(labelText: 'Thông tin chi tiết'),
                   style: TextStyle(fontSize: 18.0),
                 ),
                 SizedBox(height: 8.0),
