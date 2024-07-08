@@ -35,6 +35,7 @@ class _SignUpState extends State<SignUp> {
             .doc(userCredential.user!.uid)
             .set({
           "name": namecontroller.text,
+          "userId": userCredential.user!.uid,
           "role": role,
           "email": email,
           "profile_url":
@@ -83,7 +84,7 @@ class _SignUpState extends State<SignUp> {
                 height:
                     300.0, // Set the height you want for the image container
                 child: Image.asset(
-                  "images/KHTN.png",
+                  "images/dtvt.png",
                   fit:
                       BoxFit.contain, // Prevents the image from being distorted
                 ),
@@ -101,7 +102,6 @@ class _SignUpState extends State<SignUp> {
                         return null;
                       },
                       controller: namecontroller,
-                      maxLength: 20,
                       decoration: InputDecoration(
                         labelText: "Họ tên",
                         border: OutlineInputBorder(
@@ -140,7 +140,6 @@ class _SignUpState extends State<SignUp> {
                         return null;
                       },
                       controller: mailcontroller,
-                      maxLength: 20,
                       decoration: InputDecoration(
                         labelText: "Email",
                         border: OutlineInputBorder(

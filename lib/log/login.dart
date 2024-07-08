@@ -63,7 +63,7 @@ class _LogInState extends State<LogIn> {
                 height:
                     300.0, // Set the height you want for the image container
                 child: Image.asset(
-                  "images/KHTN.png",
+                  "images/dtvt.png",
                   fit:
                       BoxFit.contain, // Prevents the image from being distorted
                 ),

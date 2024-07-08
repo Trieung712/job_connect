@@ -20,8 +20,9 @@ exports.sendNotificationOnNewPost = functions.firestore
 
       const payload = {
         notification: {
-          title: "New Post from HR",
+          title: "Có bài viết mới vừa được đăng tải",
           body: newValue.title,
+          icon: "https://i.imgur.com/45RIRSQ.png",
         },
       };
 
