@@ -5,6 +5,8 @@ import 'package:my_app/service/auth.dart';
 import 'package:my_app/log/signup.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 class LogIn extends StatefulWidget {
   const LogIn({super.key});
@@ -25,7 +27,7 @@ class _LogInState extends State<LogIn> {
     try {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
-      // Lưu trạng thái đăng nhập
+      await _setupFirebaseMessaging();
 
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => NavigationMenu()));
@@ -44,6 +46,41 @@ class _LogInState extends State<LogIn> {
               "Wrong Password Provided by User",
               style: TextStyle(fontSize: 18.0),
             )));
+      }
+    }
+  }
+
+  Future<void> _setupFirebaseMessaging() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    // Yêu cầu quyền thông báo từ người dùng
+    NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    print('User granted permission: ${settings.authorizationStatus}');
+
+    // Lấy FCM token và lưu vào Firestore
+    String? token = await messaging.getToken();
+    if (token != null) {
+      print("FCM Token: $token");
+
+      // Lấy thông tin người dùng hiện tại từ Firebase Authentication
+      final user = FirebaseAuth.instance.currentUser;
+      if (user != null) {
+        final userId = user.uid;
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(userId)
+            .update({
+          'fcmToken': token,
+        });
       }
     }
   }

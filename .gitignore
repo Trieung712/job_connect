@@ -4,6 +4,7 @@
 *.pyc
 *.swp
 *.env
+*serviceAccount.json
 .DS_Store
 .atom/
 .buildlog/

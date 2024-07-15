@@ -55,42 +55,6 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    _setupFirebaseMessaging();
-  }
-
-  Future<void> _setupFirebaseMessaging() async {
-    FirebaseMessaging messaging = FirebaseMessaging.instance;
-
-    // Yêu cầu quyền thông báo từ người dùng
-    NotificationSettings settings = await messaging.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
-    );
-
-    print('User granted permission: ${settings.authorizationStatus}');
-
-    // Lấy FCM token và lưu vào Firestore
-    String? token = await messaging.getToken();
-    if (token != null) {
-      print("FCM Token: $token");
-
-      // Lấy thông tin người dùng hiện tại từ Firebase Authentication
-      final user = FirebaseAuth.instance.currentUser;
-      if (user != null) {
-        final userId = user.uid;
-        await FirebaseFirestore.instance
-            .collection('users')
-            .doc(userId)
-            .update({
-          'fcmToken': token,
-        });
-      }
-    }
   }
 
   @override
